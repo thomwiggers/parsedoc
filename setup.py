@@ -37,7 +37,7 @@ def find_version(fname):
         raise RuntimeError('Cannot find version information')
     return version
 
-__version__ = find_version("parsedoc.py")
+__version__ = find_version("parsedoc/__init__.py")
 
 
 def read(fname):
@@ -47,7 +47,7 @@ def read(fname):
 
 setup(
     name='parsedoc',
-    version="0.1.0",
+    version=__version__,
     description='Parses PHP doc blocks into markdown',
     long_description=read("README.rst"),
     author='Thom Wiggers',
