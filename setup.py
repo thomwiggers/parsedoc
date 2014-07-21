@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import re
 import sys
@@ -69,7 +70,7 @@ setup(
         'Programming Language :: Python :: Implementation :: CPython',
         'Programming Language :: Python :: Implementation :: PyPy'
     ],
-    py_modules=["parsedoc"],
+    packages=['parsedoc'],
     entry_points={
         'console_scripts': [
             "parsedoc = parsedoc:main"
