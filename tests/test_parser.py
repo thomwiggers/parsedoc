@@ -24,7 +24,8 @@ function foo_function($arg1, $arg2) {
     assert "Function 1 comment" not in result.comment
     assert len(result.contains) == 1  # one function
     function = result.contains[0]
-    assert function.name == "foo_function($arg1, $arg2)"
+    assert "foo_function($arg1, $arg2)" in function.name
+    assert function.comment
     assert "Function 1 comment" in function.comment
     assert len(function.contains) == 0
 

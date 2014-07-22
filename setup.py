@@ -57,7 +57,7 @@ setup(
     install_requires=REQUIRES,
     license=read("LICENSE"),
     zip_safe=False,
-    keywords='parsedoc',
+    keywords='parsedoc php',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
