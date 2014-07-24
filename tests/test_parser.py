@@ -78,7 +78,7 @@ def test_get_file_comment_empty_rest():
 
 
 def test_file_with_class():
-    result, rest = parse_file(
+    result = parse_file(
         "foo.php",
         """<?php
         /**
@@ -101,12 +101,13 @@ def test_file_with_class():
     assert type(result) == blocks.PHPFile
     assert "File comment" in result.comment
     assert len(result.contains) == 1
-    assert type(result.contains[0]) == blocks.PHPClass
     block = result.contains[0]
+    assert type(block) == blocks.PHPClass
     assert "Test Class" in block.comment
     assert "TestClass" in block.name
     assert len(block.contains) == 1
     block = block.contains[0]
+    assert type(block) == blocks.PHPFunction
     assert "test function" in block.comment
     assert "foo_function" in block.name
     assert len(block.contains) == 0
@@ -260,3 +261,19 @@ def test_class_comment_two_functions_class_uncommented():
     assert type(function) == blocks.PHPFunction
     assert "foo_function_2" in function.name
     assert function.comment == ""
+
+
+def test_function_private():
+    result, _ = get_function_or_class(
+        """
+        /**
+         * comment
+         */
+        public static function test_function () {
+            //content
+        }
+        """)
+    assert type(result) == blocks.PHPFunction
+    assert "test_function" in result.name
+    assert "comment" in result.comment
+    assert len(result.contains) == 0

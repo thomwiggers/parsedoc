@@ -26,7 +26,7 @@ def get_file_comment(file_contents):
     file_comment = None
     # Find any comment at the start of the file
     regexp = re.compile(r"""
-        ^\s*<\?(php)?\s*\n          # File start
+        ^\s*<\?(php)?\s*\n[ ]*      # File start
         (?P<docblock>/\*\*.*?\*/)?  # documentation on line 2
         [ ]*\n                      # newline
         (?P<rest>.*)$               # Rest of the file
