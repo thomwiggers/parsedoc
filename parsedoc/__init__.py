@@ -34,6 +34,7 @@ def main():
     else:
         raise ValueError("Can't open directory {}".format(args['<file']))
 
+
 def handle_file(filename, output):
     """Handle one file"""
     if not output:

@@ -2,10 +2,13 @@
 """
 Parsed blocks of PHP objects with attached comments
 """
-from __future__ import unicode_literals, print_function
+from __future__ import unicode_literals
+
 
 class PHPObject(object):
     """Base PHP object"""
+
+    template = "{name}\n```{comment}```"
 
     def __init__(self, name, comment, contains=None):
         """
@@ -19,28 +22,33 @@ class PHPObject(object):
         self.contains = contains or []
 
     def __str__(self):
-        return self.__unicode__()
+        output = self.template.format(name=self.name,
+                                      comment=self.comment)
+        for item in self.contains:
+            output += str(item)
+
+        return output
 
     def __unicode__(self):
-        return """
-        {name}
-        ======
-        {comment}""".format(name=self.name, comment=self.comment)
+        return self.__str__()
+
 
 class PHPFile(PHPObject):
     """PHP File
-    
+
     May contain classes and functions
     """
     pass
+
 
 class PHPClass(PHPObject):
     """PHP class
 
     May contain functions
     """
-    pass
+    template = "## {name}\n```{comment}```"
+
 
 class PHPFunction(PHPObject):
     """PHP Function"""
-    pass
+    template = "### {name}\n```{comment}```"

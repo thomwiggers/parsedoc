@@ -10,6 +10,7 @@ REQUIRES = [
     'docopt',
 ]
 
+
 class PyTest(TestCommand):
     def finalize_options(self):
         TestCommand.finalize_options(self)
