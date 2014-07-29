@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 from parsedoc.parser import parse_file, get_function_or_class, get_file_comment
 from parsedoc import blocks
 
