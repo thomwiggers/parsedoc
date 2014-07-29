@@ -18,6 +18,8 @@ Options:
 from __future__ import unicode_literals, print_function, with_statement
 from docopt import docopt
 
+from .parser import parse_file
+
 import os.path
 
 __version__ = "0.1.0"
@@ -41,7 +43,11 @@ def handle_file(filename, output):
         output = filename + '.md'
 
     with open(output, 'w') as outfile:
-        outfile.write("hi\n")
+        with open(filename, 'r') as f:
+            file_contents = f.read()
+        parsed = parse_file(filename, file_contents)
+        output = str(parsed)
+        outfile.write(output)
 
 
 if __name__ == '__main__':

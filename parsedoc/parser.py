@@ -45,15 +45,34 @@ def get_function_or_class(file_contents):
     regexp = re.compile(r"""
         .*?                            # Eat up everything that isn't a
                                        # function or class
-        ((?P<docblock>/\*\*.*?\*/)     # find docblock
-        [ ]*\n)?                       # eat space and newline
-        [ ]*                           # eat any prefix spaces
-        ((?P<function>                 # find a function
-            (static|public|private|protected|[ ])*
-            function .*?{          ) |
-         (?P<class>class .*? {))       # or a class
+        (
+            (?P<docblock>              # find docblock
+                /\*\*
+                    ((?!\*/).)+  # don't match */ in docblock
+                \*/
+            )
+            [ \t]*\n                   # eat space and newline
+        )?
+        [ \t]*                         # eat any prefix spaces
+        (
+            # find a function
+            (?P<function>^[ \t]*
+                (static|public|private|protected|final|abstract|[ ])*
+                    function[ ]+[a-zA-Z0-9_]+[ ]* \(.*?\)[ \t]*\n?{
+            ) |
+            # or a class
+            (?P<class>^[ \t]*
+                (static[ ]+|abstract[ ]+|final[ ]+)*[ ]*
+                class\s+[a-zA-Z0-9_]+\s*
+                ([ \t]\s*
+                    (extends|implements)\s+
+                    ([a-zA-Z-0-9_]+,?\s+)+
+                )*
+                \s* {
+            )
+         )
         (?P<rest>.*)                   # rest of the file
-        """, re.VERBOSE | re.DOTALL)
+        """, re.VERBOSE | re.DOTALL | re.MULTILINE)
     result = regexp.match(file_contents)
 
     if not result:
@@ -70,10 +89,11 @@ def get_function_or_class(file_contents):
 
 
 def parse_class(result, file_contents):
+    """Parse a class"""
     comment = ""
     if result.group('docblock'):
         comment = result.group('docblock')
-    """Parse a class"""
+
     # find contents of class:
     stack = 1
     accum = ''
@@ -86,10 +106,12 @@ def parse_class(result, file_contents):
 
         if stack == 0:
             break
+
     if len(accum) < len(result.group('rest')):
         rest = result.group('rest')[len(accum):]
     else:
         rest = ''
+
     class_contains = []
     while accum:
         block, accum = get_function_or_class(accum)

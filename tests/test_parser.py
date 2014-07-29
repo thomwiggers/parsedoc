@@ -35,7 +35,7 @@ function hi() {
 }""")
     assert type(result) == blocks.PHPFile
     assert result.name == "bar.php"
-    assert result.comment is None
+    assert result.comment is ""
     assert len(result.contains) == 1
 
 
@@ -276,4 +276,36 @@ def test_function_private():
     assert type(result) == blocks.PHPFunction
     assert "test_function" in result.name
     assert "comment" in result.comment
+    assert len(result.contains) == 0
+
+
+def test_function_caps():
+    result, _ = get_function_or_class(
+        """
+        /**
+         * comment
+         */
+        public static function TEST_FUNCTION () {
+            //content
+        }
+        """)
+    assert type(result) == blocks.PHPFunction
+    assert "TEST_FUNCTION" in result.name
+    assert "comment" in result.comment
+    assert len(result.contains) == 0
+
+
+def test_class_extended_abstract():
+    result, _ = get_function_or_class(
+        """
+        /**
+         * Comment
+         */
+        abstract class FooClass extends FooAbstract {
+          // comment
+        }
+        """)
+    assert type(result) == blocks.PHPClass
+    assert "FooClass" in result.name
+    assert "Comment" in result.comment
     assert len(result.contains) == 0
