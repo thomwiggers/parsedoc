@@ -58,7 +58,8 @@ def get_function_or_class(file_contents):
             # find a function
             (?P<function>^[ \t]*
                 (static|public|private|protected|final|abstract|[ ])*
-                    function[ ]+[a-zA-Z0-9_]+[ ]* \(.*?\)[ \t]*\n?{
+                    function[ ]+[a-zA-Z0-9_]+[ ]* \(.*?\)[ \t]*\n?
+                        ({|;)
             ) |
             # or a class
             (?P<class>^[ \t]*

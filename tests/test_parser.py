@@ -311,3 +311,17 @@ def test_class_extended_abstract():
     assert "FooClass" in result.name
     assert "Comment" in result.comment
     assert len(result.contains) == 0
+
+
+def test_abstract_function():
+    result, _ = get_function_or_class(
+        """
+        /**
+         * comment
+         */
+        abstract static function foo_function($args);
+        """)
+    assert type(result) == blocks.PHPFunction
+    assert "foo_function" in result.name
+    assert "comment" in result.comment
+    assert len(result.contains) == 0

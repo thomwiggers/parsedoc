@@ -4,6 +4,11 @@ Parsed blocks of PHP objects with attached comments
 """
 from __future__ import unicode_literals
 
+import logging
+
+
+logger = logging.getLogger(__name__)
+
 
 class PHPObject(object):
     """Base PHP object"""
@@ -11,8 +16,7 @@ class PHPObject(object):
     template = "# {name}\n```\n{comment}```\n\n"
 
     def __init__(self, name, comment, contains=None):
-        """
-        Create a new instance of a PHPObject
+        """Create a new instance of a PHPObject
 
         PHP Objects have a name, comment and may contain
         other objects
