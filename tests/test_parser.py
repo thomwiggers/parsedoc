@@ -40,7 +40,7 @@ function hi() {
 }""")
     assert type(result) == blocks.PHPFile
     assert result.name == "bar.php"
-    assert result.comment is ""
+    assert result.comment == ""
     assert len(result.contains) == 1
 
 

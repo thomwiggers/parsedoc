@@ -57,6 +57,7 @@ def readme(browse=False):
 def publish(test=False):
     """Publish to the cheeseshop."""
     if test:
-        run('python setup.py register -r test sdist upload -r test')
+        run('python setup.py register -r test sdist '
+            'bdist_wheel upload -r test')
     else:
         run("python setup.py register sdist bdist_wheel upload")
