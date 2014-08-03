@@ -21,7 +21,7 @@ def test():
 def clean():
     run("rm -rf build")
     run("rm -rf dist")
-    run("rm -rf php-doc-parser.egg-info")
+    run("rm -rf parsedoc.egg-info")
     clean_docs()
     print("Cleaned up.")
 
@@ -59,4 +59,4 @@ def publish(test=False):
     if test:
         run('python setup.py register -r test sdist upload -r test')
     else:
-        run("python setup.py register sdist upload")
+        run("python setup.py register sdist bdist_wheel upload")

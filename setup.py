@@ -52,7 +52,8 @@ setup(
     name='parsedoc',
     version=__version__,
     description='Parses PHP doc blocks into markdown',
-    long_description=read("README.rst"),
+    long_description=(read("README.rst") + "\n\n" +
+                      read("HISTORY.rst").replace('.. :changelog:', '')),
     author='Thom Wiggers',
     author_email='thom@thomwiggers.nl',
     url='https://github.com/thomwiggers/parsedoc',
