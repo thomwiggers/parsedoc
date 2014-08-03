@@ -1,5 +1,5 @@
 ===============================
-parsedoc
+Parsedoc
 ===============================
 
 .. image:: https://badge.fury.io/py/parsedoc.png
@@ -8,9 +8,21 @@ parsedoc
 .. image:: https://travis-ci.org/thomwiggers/parsedoc.png?branch=master
         :target: https://travis-ci.org/thomwiggers/parsedoc
 
-.. image:: https://pypip.in/d/parsedoc/badge.png
-        :target: https://crate.io/packages/parsedoc?version=latest
+.. image:: https://pypip.in/format/parsedoc/badge.svg
+        :target: https://pypi.python.org/pypi/parsedoc/
+        :alt: Download format
 
+.. image:: https://pypip.in/license/parsedoc/badge.svg
+        :target: https://pypi.python.org/pypi/parsedoc/
+        :alt: License
+
+.. image:: https://pypip.in/py_versions/parsedoc/badge.svg
+        :target: https://pypi.python.org/pypi/parsedoc/
+        :alt: Supported Python versions
+
+.. image:: https://pypip.in/implementation/parsedoc/badge.svg
+        :target: https://pypi.python.org/pypi/parsedoc/
+        :alt: Supported Python implementations
 
 Parses PHP doc blocks into markdown
 
