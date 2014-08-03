@@ -1,0 +1,5 @@
+========
+Usage
+========
+
+See ``parsedoc --help``.

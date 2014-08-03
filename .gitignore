@@ -44,3 +44,6 @@ README.html
 
 # Dev virtualenv
 env/
+
+# Rope
+.ropeproject/

@@ -1,17 +1,16 @@
 # -*- coding: utf-8 -*-
-"""
-Parse PHP files to get comment structures
+"""Parse PHP files to get comment structures"""
 
-"""
 from __future__ import unicode_literals, print_function, absolute_import
-import re
+
 import logging
+import re
 
 from .blocks import PHPFile, PHPClass, PHPFunction
 
 
 def parse_file(file_name, file_contents):
-    """Parse a file into blocks of objects with comments"""
+    """Parse a file into blocks of objects with comments."""
     file_comment, file_contents = get_file_comment(file_contents)
     objects = []
     while file_contents:
@@ -22,7 +21,7 @@ def parse_file(file_name, file_contents):
 
 
 def get_file_comment(file_contents):
-    """Get a comment from the start of a php file and return the rest"""
+    """Get a comment from the start of a php file and return the rest."""
     file_comment = None
     # Find any comment at the start of the file
     regexp = re.compile(r"""
@@ -41,7 +40,7 @@ def get_file_comment(file_contents):
 
 
 def get_function_or_class(file_contents):
-    """Get one function or class from file_contents"""
+    """Get one function or class from file_contents."""
     regexp = re.compile(r"""
         .*?                            # Eat up everything that isn't a
                                        # function or class
@@ -58,8 +57,8 @@ def get_function_or_class(file_contents):
             # find a function
             (?P<function>^[ \t]*
                 (static|public|private|protected|final|abstract|[ ])*
-                    function[ ]+[a-zA-Z0-9_]+[ ]* \(.*?\)[ \t]*\n?
-                        ({|;)
+                    function[ ]+[a-zA-Z0-9_]+[ ]* \(.*?\)[ \t]*?\n?
+                        [ \t]*?({|;)
             ) |
             # or a class
             (?P<class>^[ \t]*
@@ -90,7 +89,7 @@ def get_function_or_class(file_contents):
 
 
 def parse_class(result, file_contents):
-    """Parse a class"""
+    """Parse a class."""
     comment = ""
     if result.group('docblock'):
         comment = result.group('docblock')

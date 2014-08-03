@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Parsed blocks of PHP objects with attached comments
+Parsed blocks of PHP objects with attached comments.
 """
 from __future__ import unicode_literals
 
@@ -11,15 +11,15 @@ logger = logging.getLogger(__name__)
 
 
 class PHPObject(object):
-    """Base PHP object"""
+    """Base PHP object."""
 
     template = "# {name}\n```\n{comment}```\n\n"
 
     def __init__(self, name, comment, contains=None):
-        """Create a new instance of a PHPObject
+        """Creates a new instance of a PHPObject.
 
         PHP Objects have a name, comment and may contain
-        other objects
+        other objects.
         """
         self.name = name.strip().rstrip('{').strip()
         self.comment = ""
@@ -47,21 +47,21 @@ class PHPObject(object):
 
 
 class PHPFile(PHPObject):
-    """PHP File
+    """PHP File.
 
-    May contain classes and functions
+    May contain classes and functions.
     """
     pass
 
 
 class PHPClass(PHPObject):
-    """PHP class
+    """PHP class.
 
-    May contain functions
+    May contain functions.
     """
     template = "## {name}\n```\n{comment}\n```\n\n"
 
 
 class PHPFunction(PHPObject):
-    """PHP Function"""
+    """PHP Function."""
     template = "### {name}\n```\n{comment}\n```\n\n"

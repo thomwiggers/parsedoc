@@ -4,6 +4,7 @@ This file is MIT licensed as distributed by
 https://github.com/sloria/cookiecutter-docopt
 """
 import os
+import sys
 
 from invoke import task, run
 
@@ -32,7 +33,10 @@ def clean_docs():
 
 @task
 def browse_docs():
-    run("open %s" % os.path.join(build_dir, 'index.html'))
+    if sys.platform == 'linux':
+        run("xdg-open %s" % os.path.join(build_dir, 'index.html'))
+    else:
+        run("open %s" % os.path.join(build_dir, 'index.html'))
 
 
 @task

@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+"""Tests for the parser"""
+# Disable QA because test cases might use tabs/long lines
+# flake8: noqa
 from __future__ import unicode_literals
 
 from parsedoc.parser import parse_file, get_function_or_class, get_file_comment
@@ -325,3 +328,55 @@ def test_abstract_function():
     assert "foo_function" in result.name
     assert "comment" in result.comment
     assert len(result.contains) == 0
+
+
+def test_function_with_body():
+    """Test a function with a body
+
+    The below code is part of Gazelle.
+    """
+    result, _ = get_function_or_class(
+       r"""
+    /**
+     * @param string $application
+     * @param string $event
+     * @param string $description
+     * @param string $url
+     * @param int    $priority
+     * @param bool   $apiKeys
+     *
+     * @return bool|mixed|SimpleXMLElement|string
+     */
+    public function notify($application = '', $event = '', $description = '', $url = '', $priority = 0, $apiKeys = false)
+    {
+        if (empty($application) || empty($event) || empty($description)) {
+            return $this->error('you must supply a application name, event and long desc');
+        }
+
+        $post = array('application' => substr($application, 0, 256),
+                      'event'       => substr($event, 0, 1000),
+                      'description' => substr($description, 0, 10000),
+                      'priority'    => $priority
+        );
+		if (!empty($url)) {
+			$post['url'] = substr($url, 0, 2000);
+		}
+        if ($this->devKey) {
+            $post['developerkey'] = $this->devKey;
+        }
+
+        if ($apiKeys !== false) {
+            $post['apikey'] = $apiKeys;
+        } else {
+            $post['apikey'] = $this->apiKey;
+        }
+
+        return $this->makeApiCall(self::LIB_NMA_NOTIFY, $post, 'POST');
+    }
+        """)
+
+    assert type(result) == blocks.PHPFunction
+    assert "application" in result.comment
+    assert "event" in result.comment
+    assert "notify" in result.name
+    assert "if (empty" not in result.name

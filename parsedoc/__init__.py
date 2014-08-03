@@ -21,9 +21,11 @@ Options:
     --ignore-patterns=PATTERN  Ignore these directories [default: .*]
                                (comma-separated)
     --no-create-index          Don't write index files
+    --skip-empty-files         Don't write files which would have no comments
 
   Filter options:
     --only-include-annotated   Only include specifically annotated functions
+                               Implies --skip-empty-files
     --annotations=ANNOTATION   Annotations to include (comma-separated)
                                [default: @API,@APILow]
 
@@ -42,7 +44,7 @@ from fnmatch import fnmatch
 from docopt import docopt
 from parsedoc.parser import parse_file
 from parsedoc.utils import create_index
-from parsedoc.plugins import preprocessing_plugins
+from parsedoc.plugins import preprocessing_plugins, postprocessing_plugins
 
 logger = logging.getLogger(__name__)
 
@@ -101,9 +103,12 @@ def handle_file(filename, output, args):
         parsed = parse_file(os.path.basename(filename), file_contents)
 
     # List comprehensions hell yeah
-    [func(parsed, args) for func in preprocessing_plugins]
+    l = [func(parsed, args) for func in preprocessing_plugins]
+    # shut up pylint
+    del l
 
-    if parsed.comment == "" and len(parsed.contains) == 0:
+    if (parsed.comment == "" and len(parsed.contains) == 0
+            and args['--skip-empty-files']):
         # Would result in empty file, so let's not do this
         logging.info("File %s is skipped because it contained no comments "
                      "to write", filename)
@@ -162,6 +167,10 @@ def handle_dir(source_dir_name,
                 logger.debug("Couldn't remove %s", current_dir_path,
                              exc_info=True)
                 pass
+
+    # Postprocessing
+    l = [f(args) for f in postprocessing_plugins]
+    del l
 
 
 def _filter_dirnames(dirnames, exclude_patterns):
