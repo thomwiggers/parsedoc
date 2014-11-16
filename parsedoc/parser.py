@@ -50,7 +50,7 @@ def get_function_or_class(file_contents):
                     ((?!\*/).)+  # don't match */ in docblock
                 \*/
             )
-            [ \t]*\n                   # eat space and newline
+            [ \t]*\n+                  # eat space and newline
         )?
         [ \t]*                         # eat any prefix spaces
         (
@@ -79,8 +79,10 @@ def get_function_or_class(file_contents):
         return None, ""
 
     if result.group('class'):
+        logging.debug("Found class")
         return parse_class(result, file_contents)
     elif result.group('function'):
+        logging.debug("Found function")
         comment = ""
         if result.group('docblock'):
             comment = result.group('docblock')
@@ -90,6 +92,7 @@ def get_function_or_class(file_contents):
 
 def parse_class(result, file_contents):
     """Parse a class."""
+
     comment = ""
     if result.group('docblock'):
         comment = result.group('docblock')

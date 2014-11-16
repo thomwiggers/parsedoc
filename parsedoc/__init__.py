@@ -48,7 +48,7 @@ from parsedoc.plugins import preprocessing_plugins, postprocessing_plugins
 
 logger = logging.getLogger(__name__)
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 __author__ = "Thom Wiggers"
 __license__ = "GPLv3"
 
@@ -69,11 +69,11 @@ def main():
         if os.path.isfile(args['<file>']):
             handle_file(args['<file>'], args.get('--output'), args)
         elif os.path.isdir(args['<file>']):
-            logging.error("{} is a directory. Specify the output directory to "
+            logging.error("%s is a directory. Specify the output directory to "
                           "parse directories.", args['<file>'])
             sys.exit(1)
         else:
-            logging.error("Can't open file {}", args['<file>'])
+            logging.error("Can't open file %s", args['<file>'])
             sys.exit(1)
     # Directory mode
     elif args.get('<directory>') and args.get('<outputdir>'):
