@@ -13,6 +13,7 @@ Options:
   File parse mode:
     <file>                     File to parse
     -o FILE --output=FILE      Output to this file (default: <file>.md)
+    --no-output                Don't write output, useful for doc linting
 
   Directory parse mode:
     <directory>                Directory to parse
@@ -48,7 +49,7 @@ from parsedoc.plugins import preprocessing_plugins, postprocessing_plugins
 
 logger = logging.getLogger(__name__)
 
-__version__ = "0.1.1"
+__version__ = "0.2.0"
 __author__ = "Thom Wiggers"
 __license__ = "GPLv3"
 
@@ -66,7 +67,9 @@ def main():
 
     # We're in file mode
     if args.get('<file>'):
-        if os.path.isfile(args['<file>']):
+        if args['<file>'] == '-':
+            handle_file('stdin', args.get('--output'), args)
+        elif os.path.isfile(args['<file>']):
             handle_file(args['<file>'], args.get('--output'), args)
         elif os.path.isdir(args['<file>']):
             logging.error("%s is a directory. Specify the output directory to "
@@ -98,9 +101,13 @@ def handle_file(filename, output, args):
         output = filename + '.md'
     logger.info("Parsing %s into %s", filename, output)
 
-    with open(filename, 'r') as f:
-        file_contents = f.read()
-        parsed = parse_file(os.path.basename(filename), file_contents)
+    if filename == 'stdin':
+        file_contents = sys.stdin.read()
+        parsed = parse_file('stdinput', file_contents)
+    else:
+        with open(filename, 'r') as f:
+            file_contents = f.read()
+            parsed = parse_file(os.path.basename(filename), file_contents)
 
     # List comprehensions hell yeah
     l = [func(parsed, args) for func in preprocessing_plugins]
@@ -113,6 +120,10 @@ def handle_file(filename, output, args):
         logging.info("File %s is skipped because it contained no comments "
                      "to write", filename)
         return False
+
+    if args['--no-output']:
+        logging.info("Skipping output")
+        return True
 
     with open(output, 'w') as outfile:
         output = str(parsed)
