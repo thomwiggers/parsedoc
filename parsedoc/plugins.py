@@ -15,15 +15,16 @@ def annotation_filter(parsed, args):
     # --skip-empty-files is implied by --only-include-annotated
     args['--skip-empty-files'] |= args['--only-include-annotated']
 
-    annotations = args['--annotations'].split()
+    annotations = args['--annotations'].split(',')
 
     def recursive_filter_annotation(obj):
         obj.contains = [recursive_filter_annotation(child)
                         for child in obj.contains]
-        filter(None, obj.contains)
+        obj.contains = list(filter(None, obj.contains))
 
         if len(obj.contains) == 0:
             for annotation in annotations:
+                logging.debug("Looking for annotation %s", annotation)
                 if annotation in obj.comment:
                     # index the annotation
                     if not _annotated.get(annotation):
@@ -32,11 +33,17 @@ def annotation_filter(parsed, args):
                         _annotated[annotation][parsed.name] = []
                     _annotated[annotation][parsed.name].append(obj.name)
                     return obj
-                elif args['--only-include-annotated']:
+            else:
+                if args['--only-include-annotated']:
+                    logging.debug("Didn't find annotations in this object, "
+                                  "stripping")
                     return None
                 else:
+                    logging.debug("Returning object %s", repr(obj))
                     # we still need to return it because we're not cleaning
                     return obj
+        else:
+            return obj
 
     recursive_filter_annotation(parsed)
 
