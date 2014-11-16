@@ -1,0 +1,56 @@
+#!/usr/bin/env python3
+
+import os
+import sys
+import subprocess
+
+
+def find_files(oldrev, newrev):
+    output = subprocess.check_output(
+        ['git', 'diff-tree', '--no-commit-id', '-r', oldrev, newrev],
+        universal_newlines=True
+    ).strip().split('\n')
+    output = map(lambda x: x.split(), output)
+    return map(lambda x: (x[3], x[5]), output)
+
+
+def process_files(files):
+    result = True
+    for f in files:
+        if len(f[1]) > 4 and f[1][-4:] == '.php':
+            print('Checking {}'.format(f[1]))
+            file_contents = subprocess.check_output(
+                ['git', 'cat-file', 'blob', f[0]],
+                universal_newlines=True
+            )
+            output = subprocess.check_output(
+                ['parsedoc', '--no-output', '--loglevel=WARNING', '-'],
+                input=file_contents,
+                stderr=subprocess.STDOUT,
+                universal_newlines=True
+            ).replace('stdinput', f[1])
+
+            if 'WARNING' in output:
+                result = False
+                print(output)
+
+    return result
+
+
+if __name__ == '__main__':
+    refname = sys.argv[1]
+    oldrev = sys.argv[2]
+    newrev = sys.argv[3]
+    user = os.environ['USER']
+
+    print("Processing {} branch".format(refname))
+    files = find_files(oldrev, newrev)
+    errors_found = not process_files(files)
+    if errors_found:
+        print("I'm afraid you have to fix your documentation. Each PHP file "
+              "needs to have a comment block at the start of the file, a "
+              "comment block at the start of every class and at the start of "
+              "every function or class member", file=sys.stderr)
+        print("The comment blocks need to look like this:\n/**\n * This is a "
+              "comment block\n */", file=sys.stderr)
+    sys.exit(1)
