@@ -8,19 +8,19 @@ Parsedoc
 .. image:: https://travis-ci.org/thomwiggers/parsedoc.png?branch=master
         :target: https://travis-ci.org/thomwiggers/parsedoc
 
-.. image:: https://pypip.in/format/parsedoc/badge.svg
+.. image:: https://img.shields.io/pypi/format/parsedoc.svg
         :target: https://pypi.python.org/pypi/parsedoc/
         :alt: Download format
 
-.. image:: https://pypip.in/license/parsedoc/badge.svg
+.. image:: https://img.shields.io/pypi/l/parsedoc.svg
         :target: https://pypi.python.org/pypi/parsedoc/
         :alt: License
 
-.. image:: https://pypip.in/py_versions/parsedoc/badge.svg
+.. image:: https://img.shields.io/pypi/pyversions/parsedoc.svg
         :target: https://pypi.python.org/pypi/parsedoc/
         :alt: Supported Python versions
 
-.. image:: https://pypip.in/implementation/parsedoc/badge.svg
+.. image:: https://img.shields.io/pypi/implementation/parsedoc.svg
         :target: https://pypi.python.org/pypi/parsedoc/
         :alt: Supported Python implementations
 
