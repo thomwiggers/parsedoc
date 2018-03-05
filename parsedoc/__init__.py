@@ -110,9 +110,8 @@ def handle_file(filename, output, args):
             parsed = parse_file(os.path.basename(filename), file_contents)
 
     # List comprehensions hell yeah
-    l = [func(parsed, args) for func in preprocessing_plugins]
-    # shut up pylint
-    del l
+    for func in preprocessing_plugins:
+        func(parsed, args)
 
     if (parsed.comment == "" and len(parsed.contains) == 0
             and args['--skip-empty-files']):
@@ -177,11 +176,10 @@ def handle_dir(source_dir_name,
             except OSError:
                 logger.debug("Couldn't remove %s", current_dir_path,
                              exc_info=True)
-                pass
 
     # Postprocessing
-    l = [f(args) for f in postprocessing_plugins]
-    del l
+    for function in postprocessing_plugins:
+        function(args)
 
 
 def _filter_dirnames(dirnames, exclude_patterns):
